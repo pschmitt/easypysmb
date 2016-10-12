@@ -5,6 +5,7 @@
 from nmb.NetBIOS import NetBIOS
 from smb.SMBConnection import SMBConnection
 import logging
+import re
 import tempfile
 import os
 
@@ -23,6 +24,24 @@ class EasyPySMB():
 
     def __init__(self, hostname, username='GUEST', password=None, domain=None,
                 client_name=None, port=139, share_name=None):
+        if hostname.startswith('smb://'):
+            # regex = 'smb://(.+\;)?(.*):(.*)@([^/]+)/(.+)'
+            # regex = 'smb://(((.+);)?(.+):(.+)@)?([^/]+)/([^/]+).*'
+            # regex = 'smb://(((.+);)?(.+):(.+)@)?([^/]+)/(.+)(/.*)'
+            regex = 'smb://(((.+);)?(.+):(.+)@)?([^/]+)(/(.+))?(/.*)?'
+            m = re.match(regex, hostname)
+            if not m:
+                raise ValueError('Could not decompose smb path. The regex failed.')
+            domain = m.group(3) if m.group(3) else ''
+            username = m.group(4) if m.group(4) else 'GUEST'
+            password = m.group(5) if m.group(5) else ''
+            hostname = m.group(6)
+            share_name = m.group(8)
+            logger.debug(
+                'Domain: {} Username: {} Password: {} Server: {} Path: {}'.format(
+                    domain, username, password, hostname, share_name
+                )
+            )
         if not client_name:
             client_name = __name__
         self.conn = SMBConnection(
@@ -149,3 +168,12 @@ class EasyPySMB():
                 share_name = self.share_name
             else:
                 share_name, file_path = self.__decompose_smb_path(file_path)
+        return self.conn.deleteFiles(share_name, file_path)
+
+    def ls(self, path='', share_name=None):
+        if not share_name:
+            if self.share_name:
+                share_name = self.share_name
+            else:
+                share_name, path = self.__decompose_smb_path(path)
+        return self.conn.listPath(share_name, path=path)
