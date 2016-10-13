@@ -1,2 +1,1 @@
-workon easysmb
 workon easypysmb
