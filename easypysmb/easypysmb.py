@@ -23,12 +23,9 @@ def get_netbios_name(hostname):
 class EasyPySMB():
 
     def __init__(self, hostname, username='GUEST', password=None, domain=None,
-                client_name=None, port=139, share_name=None):
+                client_name=None, port=139, share_name=None, file_path=None):
         if hostname.startswith('smb://'):
-            # regex = 'smb://(.+\;)?(.*):(.*)@([^/]+)/(.+)'
-            # regex = 'smb://(((.+);)?(.+):(.+)@)?([^/]+)/([^/]+).*'
-            # regex = 'smb://(((.+);)?(.+):(.+)@)?([^/]+)/(.+)(/.*)'
-            regex = 'smb://(((.+);)?(.+):(.+)@)?([^/]+)(/(.+))?(/.*)?'
+            regex = 'smb://(((.+);)?(.+):(.+)@)?([^/]+)(/([^/]+))?(/.*)?'
             m = re.match(regex, hostname)
             if not m:
                 raise ValueError('Could not decompose smb path. The regex failed.')
@@ -37,9 +34,11 @@ class EasyPySMB():
             password = m.group(5) if m.group(5) else ''
             hostname = m.group(6)
             share_name = m.group(8)
+            file_path = m.group(9)
             logger.debug(
-                'Domain: {} Username: {} Password: {} Server: {} Path: {}'.format(
-                    domain, username, password, hostname, share_name
+                'Domain: {} Username: {} Password: {} Server: {} Share: {} ' \
+                'File Path: {}'.format(
+                    domain, username, password, hostname, share_name, file_path
                 )
             )
         if not client_name:
@@ -57,13 +56,21 @@ class EasyPySMB():
                 'Could not connnect to SMB server. Please verify the '\
                 'connection data'
             )
+        # tmpdir is a temp dir that holds the transfered files by default
+        self.tmpdir = tempfile.mkdtemp(prefix='easypysmb_')
         self.share_name = share_name
+        self.file_path = file_path
         if self.share_name:
             available_shares = [x.lower() for x in self.list_shares()]
             if self.share_name.lower() not in available_shares:
                 logger.warning(
                     'Share {} does not exist on the server'.format(self.share_name)
                 )
+        dir_content = [x.filename for x in self.ls(os.path.dirname(self.file_path))]
+        if os.path.basename(self.file_path) not in dir_content:
+            logger.warning(
+                'File {} does not exist on the server'.format(self.file_path)
+            )
 
     def __decompose_smb_path(self, path):
         '''
@@ -71,7 +78,6 @@ class EasyPySMB():
         '''
         split_path = path.split('/')
         return split_path[0], '/'.join(split_path[1:])
-
 
     def __guess_share_name(self, path, share_name=None):
         if share_name:
@@ -112,10 +118,22 @@ class EasyPySMB():
                     )
                 )
 
-    def retrieve_file(self, dest_path, file_obj=None, share_name=None):
+    def retrieve_file(self, dest_path=None, file_obj=None, share_name=None):
+        if not dest_path:
+            dest_path = self.file_path
+        assert dest_path, 'Destination path is unset'
         share_name, dest_path = self.__guess_share_name(dest_path, share_name)
         if not file_obj:
-            file_obj = tempfile.NamedTemporaryFile(delete=False)
+            file_obj = open(
+                os.path.join(self.tmpdir, os.path.basename(dest_path)),
+                'w+b'
+            )
+            # file_obj = tempfile.NamedTemporaryFile(
+            #     prefix='py_',
+            #     suffix=os.path.basename(dest_path),
+            #     dir=self.tmpdir,
+            #     delete=False
+            # )
         elif type(file_obj) is str or type(file_obj) is str:
             file_obj = open(file_obj, 'wb')
         bytes_transfered = self.conn.retrieveFile(share_name, dest_path, file_obj)
@@ -124,8 +142,11 @@ class EasyPySMB():
         file_obj = open(file_obj.name)
         return file_obj
 
-    def backup_file(self, file_path, backup_file_path, share_name=None,
+    def backup_file(self, backup_file_path, file_path=None, share_name=None,
                     backup_share_name=None):
+        if not file_path:
+            file_path = self.file_path
+        assert file_path, 'Destination path is unset'
         share_name, file_path = self.__guess_share_name(file_path, share_name)
         backup_share_name, backup_file_path = self.__guess_share_name(
             backup_file_path, backup_share_name
@@ -176,4 +197,5 @@ class EasyPySMB():
                 share_name = self.share_name
             else:
                 share_name, path = self.__decompose_smb_path(path)
+        logger.info('List files in {}:{}'.format(share_name, path))
         return self.conn.listPath(share_name, path=path)
