@@ -16,6 +16,8 @@ logging.getLogger('SMB.SMBConnection').setLevel(logging.WARNING)
 
 
 def get_netbios_name(hostname):
+    if hostname in ['127.0.0.1', 'localhost']:
+        return 'localhost'
     n = NetBIOS()
     return n.queryIPForName(hostname)[0]
 
