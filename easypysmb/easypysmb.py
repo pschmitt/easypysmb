@@ -10,7 +10,7 @@ import tempfile
 import os
 
 
-logging.basicConfig()
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logging.getLogger('SMB.SMBConnection').setLevel(logging.WARNING)
 
@@ -102,10 +102,18 @@ class EasyPySMB():
     def list_shares(self):
         return [x.name for x in self.conn.listShares()]
 
-    def store_file(self, file_obj, dest_path, share_name=None, retries=3):
+    def store_file(self, file_obj, dest_path=None, share_name=None, retries=3):
+        if not dest_path:
+            dest_path = self.file_path
+        assert dest_path, 'Destination path is unset'
         share_name, dest_path = self.__guess_share_name(dest_path, share_name)
         if type(file_obj) is str or type(file_obj) is str:
             file_obj = open(file_obj)
+        logger.info(
+            'Attempt to store {} on {}:{}'.format(
+                file_obj.name, share_name, dest_path
+            )
+        )
         for r in range(1, retries + 1):
             try:
                 return self.conn.storeFile(
