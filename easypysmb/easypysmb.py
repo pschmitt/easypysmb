@@ -25,7 +25,8 @@ def get_netbios_name(hostname):
 class EasyPySMB():
 
     def __init__(self, hostname, username='GUEST', password=None, domain=None,
-                client_name=None, port=139, share_name=None, file_path=None):
+                client_name=None, port=139, share_name=None, file_path=None,
+                netbios_name=None):
         if hostname.startswith('smb://'):
             regex = 'smb://(((.+);)?(.+):(.+)@)?([^/]+)(/([^/]+))?(/.*)?'
             m = re.match(regex, hostname)
@@ -45,12 +46,14 @@ class EasyPySMB():
             )
         if not client_name:
             client_name = __name__
+        if not netbios_name:
+            netbios_name = get_netbios_name(hostname)
         self.conn = SMBConnection(
             domain=domain,
             username=username,
             password=password,
             my_name=client_name,
-            remote_name=get_netbios_name(hostname),
+            remote_name=netbios_name,
             use_ntlm_v2=True
         )
         if not self.conn.connect(hostname, port):
