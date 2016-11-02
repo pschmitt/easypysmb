@@ -71,11 +71,12 @@ class EasyPySMB():
                 logger.warning(
                     'Share {} does not exist on the server'.format(self.share_name)
                 )
-        dir_content = [x.filename for x in self.ls(os.path.dirname(self.file_path))]
-        if os.path.basename(self.file_path) not in dir_content:
-            logger.warning(
-                'File {} does not exist on the server'.format(self.file_path)
-            )
+        if self.file_path:
+            dir_content = [x.filename for x in self.ls(os.path.dirname(self.file_path))]
+            if os.path.basename(self.file_path) not in dir_content:
+                logger.warning(
+                    'File {} does not exist on the server'.format(self.file_path)
+                )
 
     def __decompose_smb_path(self, path):
         '''
