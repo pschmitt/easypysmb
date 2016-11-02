@@ -5,9 +5,10 @@
 from nmb.NetBIOS import NetBIOS
 from smb.SMBConnection import SMBConnection
 import logging
-import re
-import tempfile
 import os
+import re
+import socket
+import tempfile
 
 
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +20,14 @@ def get_netbios_name(hostname):
     if hostname in ['127.0.0.1', 'localhost']:
         return 'localhost'
     n = NetBIOS()
-    return n.queryIPForName(hostname)[0]
+    resp =  n.queryIPForName(hostname)
+    if resp:
+        return resp[0]
+    else:
+        # Default to first part of hostname
+        # eg: smbsrv01.example.com -> smbsrv01
+        dns_name = socket.gethostbyaddr(hostname)[0]  # "nslookup"
+        return dns_name.split('.')[0]
 
 
 class EasyPySMB():
