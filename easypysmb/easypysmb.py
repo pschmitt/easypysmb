@@ -120,7 +120,7 @@ class EasyPySMB():
         assert dest_path, 'Destination path is unset'
         share_name, dest_path = self.__guess_share_name(dest_path, share_name)
         if type(file_obj) is str or type(file_obj) is str:
-            file_obj = open(file_obj)
+            file_obj = open(file_obj, 'rb')
         logger.info(
             'Attempt to store {} on {}:{}'.format(
                 file_obj.name, share_name, dest_path
