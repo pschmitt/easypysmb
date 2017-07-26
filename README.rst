@@ -5,7 +5,7 @@ This library wraps around the pysmb library
 
 .. code-block::
 
-    from easypysmb install EasyPySMB
+    from easypysmb import EasyPySMB
 
     # Connect
     e = EasyPySMB(
