@@ -15,6 +15,9 @@ This library wraps around the pysmb library
         password='PassW0rd'
     )
 
+    # List files
+    e.ls('share1/')
+
     # Store files
     e.store_file('/tmp/test.txt', 'share1/test.txt')
 
