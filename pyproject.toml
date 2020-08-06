@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "easypysmb"
-version = "0.1.0"
+version = "1.4.3"
 description = "Easy to use PySMB wrapper library"
 authors = ["Philipp Schmitt <philipp@schmitt.co>"]
 license = "GPL-3.0-only"
