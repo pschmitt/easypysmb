@@ -12,7 +12,7 @@ description = "pysmb is an experimental SMB/CIFS library written in Python to su
 name = "pysmb"
 optional = false
 python-versions = "*"
-version = "1.2.1"
+version = "1.2.2"
 
 [package.dependencies]
 pyasn1 = "*"
@@ -39,5 +39,5 @@ pyasn1 = [
     {file = "pyasn1-0.4.8.tar.gz", hash = "sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba"},
 ]
 pysmb = [
-    {file = "pysmb-1.2.1.zip", hash = "sha256:ab721bbdcf27a4a8a77e2f82dfc6d5e33b4db88f5075160a8bc065722a1270be"},
+    {file = "pysmb-1.2.2.zip", hash = "sha256:59ccd07537fb2a630b0d8cccd78e80180bcca72150d7322c318e1bdae927e125"},
 ]
