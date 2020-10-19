@@ -1,26 +1,26 @@
 [[package]]
-category = "main"
-description = "ASN.1 types and codecs"
 name = "pyasn1"
+version = "0.4.8"
+description = "ASN.1 types and codecs"
+category = "main"
 optional = false
 python-versions = "*"
-version = "0.4.8"
 
 [[package]]
-category = "main"
-description = "pysmb is an experimental SMB/CIFS library written in Python to support file sharing between Windows and Linux machines"
 name = "pysmb"
+version = "1.2.5"
+description = "pysmb is an experimental SMB/CIFS library written in Python to support file sharing between Windows and Linux machines"
+category = "main"
 optional = false
 python-versions = "*"
-version = "1.2.4"
 
 [package.dependencies]
 pyasn1 = "*"
 
 [metadata]
-content-hash = "a1bba5147c7a9248c0edf1abfa73f6f2073d9a26d322fde7d65ee2da1919b174"
-lock-version = "1.0"
+lock-version = "1.1"
 python-versions = "^3.8"
+content-hash = "a1bba5147c7a9248c0edf1abfa73f6f2073d9a26d322fde7d65ee2da1919b174"
 
 [metadata.files]
 pyasn1 = [
@@ -39,5 +39,5 @@ pyasn1 = [
     {file = "pyasn1-0.4.8.tar.gz", hash = "sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba"},
 ]
 pysmb = [
-    {file = "pysmb-1.2.4.zip", hash = "sha256:0937cb44936805d403e8e678d7042feb6d85da950a7019e8ae6842a0720fb00c"},
+    {file = "pysmb-1.2.5.zip", hash = "sha256:7aedd5e003992c6c78b41a0da4bf165359a46ea25ab2a9a1594d13f471ad7287"},
 ]
