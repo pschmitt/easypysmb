@@ -8,7 +8,7 @@ python-versions = "*"
 
 [[package]]
 name = "pysmb"
-version = "1.2.6"
+version = "1.2.7"
 description = "pysmb is an experimental SMB/CIFS library written in Python to support file sharing between Windows and Linux machines"
 category = "main"
 optional = false
@@ -39,5 +39,5 @@ pyasn1 = [
     {file = "pyasn1-0.4.8.tar.gz", hash = "sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba"},
 ]
 pysmb = [
-    {file = "pysmb-1.2.6.zip", hash = "sha256:f16e5e796b9dcc1d17ee76f87d53dd471f205fa19b4045eeda5bc7558a57d579"},
+    {file = "pysmb-1.2.7.zip", hash = "sha256:298605b8f467ce15b412caaf9af331c135e88fa2172333af14b1b2916361cb6b"},
 ]
