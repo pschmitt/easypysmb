@@ -27,14 +27,14 @@ files = [
 
 [[package]]
 name = "pysmb"
-version = "1.2.13"
+version = "1.2.14"
 description = "pysmb is an experimental SMB/CIFS library written in Python to support file sharing between Windows and Linux machines"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "pysmb-1.2.13-py3-none-any.whl", hash = "sha256:3b1a4fc4b8a02293bbb5032f8397a737e760048c7ae7869681317e5c41195fc2"},
-    {file = "pysmb-1.2.13.tar.gz", hash = "sha256:89d37fc4f061acecf40e6864e555898f2ecc49994ec06949edbb94b94239a808"},
+    {file = "pysmb-1.2.14-py3-none-any.whl", hash = "sha256:9fef4aa5d2a0029b8f8dc12292b5b82730407f53148c13acdaa851a4acb9407f"},
+    {file = "pysmb-1.2.14.tar.gz", hash = "sha256:16df5eac0278249aa41d669f5ca9d923ee334a003404a7e1c0edd8ca9a7d531c"},
 ]
 
 [package.dependencies]
