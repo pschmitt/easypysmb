@@ -10,7 +10,6 @@ import re
 import socket
 import tempfile
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logging.getLogger("SMB.SMBConnection").setLevel(logging.WARNING)
